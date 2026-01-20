@@ -1,1 +1,5 @@
-@import "tailwindcss";
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+/* Preflight is disabled - browser default styles will be preserved */
+@import "tailwindcss/utilities.css" layer(utilities);
