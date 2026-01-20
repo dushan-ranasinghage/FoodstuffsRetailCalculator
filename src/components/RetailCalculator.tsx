@@ -5,23 +5,35 @@
  * @copyright Copyright 2026 - All Rights Reserved.
  */
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { calculateDiscount, calculateSubTotal } from "../utils/calculations";
 import CalculationResults from "./CalculationResults/CalculationResults";
+import { TAX_RATES } from "../constants/constants";
 
 const RetailCalculator = () => {
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
   const [price, setPrice] = useState<number | null>(null);
+  const [region, setRegion] = useState<string>("");
   const [discount, setDiscount] = useState<number | null>(null);
   const [subtotal, setSubtotal] = useState<number | null>(null);
 
+  const taxRate = useMemo(() => {
+    return region ? TAX_RATES[region as keyof typeof TAX_RATES] : 0;
+  }, [region]);
+
+  console.log("taxRate", taxRate);
+  
   const onChangeNumberOfItems = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNumberOfItems(e.target.value ? parseInt(e.target.value, 10) : null);
   };
 
   const onChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(e.target.value ? parseFloat(e.target.value) : null);
+  };
+
+  const onChangeRegion = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRegion(e.target.value);
   };
 
   const handleCalculate = () => {
@@ -68,13 +80,19 @@ const RetailCalculator = () => {
         </div>
         <div>
           <label htmlFor="region">Region:</label>
-          <select id="region" name="region" className="ml-2 border">
+          <select
+            id="region"
+            name="region"
+            className="ml-2 border"
+            value={region}
+            onChange={onChangeRegion}
+          >
             <option value="">Select a region</option>
-            <option value="AUK">AUK - Auckland (6.85%)</option>
-            <option value="WLG">WLG - Wellington (8.00%)</option>
-            <option value="WAI">WAI - Waikato (6.25%)</option>
-            <option value="CHC">CHC - Christchurch (4.00%)</option>
-            <option value="TAS">TAS - Tasmania (8.25%)</option>
+            {Object.keys(TAX_RATES).map((key) => (
+              <option key={key} value={key}>
+                {key} - {TAX_RATES[key as keyof typeof TAX_RATES] * 100}%
+              </option>
+            ))}
           </select>
         </div>
         <div>
