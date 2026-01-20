@@ -5,6 +5,8 @@
  * @copyright Copyright 2026 - All Rights Reserved.
  */
 
+import { DISCOUNT_LEVELS } from "../constants/constants";
+
 export const calculateSubTotal = (
   numberOfItems: number | null,
   price: number | null,
@@ -17,6 +19,18 @@ export const calculateSubTotal = (
   ) {
     return 0;
   }
+
   const total = numberOfItems * price;
+
   return total;
+};
+
+export const calculateDiscount = (subtotal: number) => {
+  for (const level of DISCOUNT_LEVELS) {
+    if (subtotal >= level.threshold) {
+      return level.rate;
+    }
+  }
+
+  return 0;
 };

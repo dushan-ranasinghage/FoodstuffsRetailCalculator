@@ -6,7 +6,7 @@
  */
 
 import { useState } from "react";
-import { calculateSubTotal } from "./utils/calculations";
+import { calculateDiscount, calculateSubTotal } from "./utils/calculations";
 
 function App() {
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
@@ -23,6 +23,10 @@ function App() {
 
   const handleCalculate = () => {
     const total = calculateSubTotal(numberOfItems, price);
+    const discount = calculateDiscount(total);
+    const discountedTotal = total - total * discount;
+    console.log("discount", discount);
+    console.log("discountedTotal", discountedTotal);
     setSubtotal(total);
   };
 
