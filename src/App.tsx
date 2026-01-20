@@ -11,6 +11,7 @@ import { calculateDiscount, calculateSubTotal } from "./utils/calculations";
 function App() {
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
   const [price, setPrice] = useState<number | null>(null);
+  const [discount, setDiscount] = useState<number | null>(null);
   const [subtotal, setSubtotal] = useState<number | null>(null);
 
   const onChangeNumberOfItems = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,10 +25,17 @@ function App() {
   const handleCalculate = () => {
     const total = calculateSubTotal(numberOfItems, price);
     const discount = calculateDiscount(total);
-    const discountedTotal = total - total * discount;
-    console.log("discount", discount);
-    console.log("discountedTotal", discountedTotal);
+
     setSubtotal(total);
+    setDiscount(total * discount);
+  };
+
+  const displayTotal = () => {
+    if (subtotal !== null && discount !== null) {
+      return subtotal - discount;
+    }
+    
+    return null;
   };
 
   return (
@@ -80,6 +88,18 @@ function App() {
           <label htmlFor="subTotal">Subtotal:</label>
           <span className="ml-2" id="subTotal">
             {subtotal !== null ? `$${subtotal.toFixed(2)}` : ""}
+          </span>
+        </div>
+        <div>
+          <label htmlFor="discount">Discount:</label>
+          <span className="ml-2" id="discount">
+            {discount !== null ? `$${discount.toFixed(2)}` : ""}
+          </span>
+        </div>
+        <div>
+          <label htmlFor="total">Total:</label>
+          <span className="ml-2" id="total">
+            {displayTotal() !== null ? `$${displayTotal()!.toFixed(2)}` : ""}
           </span>
         </div>
       </div>
