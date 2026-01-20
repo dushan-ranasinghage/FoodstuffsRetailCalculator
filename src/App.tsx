@@ -5,7 +5,27 @@
  * @copyright Copyright 2026 - All Rights Reserved.
  */
 
+import { useState } from "react";
+import { calculateSubTotal } from "./utils/calculations";
+
 function App() {
+  const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
+  const [price, setPrice] = useState<number | null>(null);
+  const [subtotal, setSubtotal] = useState<number | null>(null);
+
+  const onChangeNumberOfItems = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNumberOfItems(e.target.value ? parseInt(e.target.value, 10) : null);
+  };
+
+  const onChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPrice(e.target.value ? parseFloat(e.target.value) : null);
+  };
+
+  const handleCalculate = () => {
+    const total = calculateSubTotal(numberOfItems, price);
+    setSubtotal(total);
+  };
+
   return (
     <section className="p-4">
       <h1 className="text-3xl font-bold mb-4">Retail Calculator</h1>
@@ -17,6 +37,8 @@ function App() {
             id="numberOfItems"
             name="numberOfItems"
             className="ml-2 border"
+            value={numberOfItems ?? ""}
+            onChange={onChangeNumberOfItems}
           />
         </div>
         <div>
@@ -26,6 +48,8 @@ function App() {
             id="price"
             name="price"
             className="ml-2 border"
+            value={price ?? ""}
+            onChange={onChangePrice}
           />
         </div>
         <div>
@@ -40,9 +64,19 @@ function App() {
           </select>
         </div>
         <div>
-          <button type="button" className="px-4 py-1 border bg-gray-100">
+          <button
+            type="button"
+            className="px-4 py-1 border bg-gray-100"
+            onClick={handleCalculate}
+          >
             Calculate
           </button>
+        </div>
+        <div>
+          <label htmlFor="subTotal">Subtotal:</label>
+          <span className="ml-2" id="subTotal">
+            {subtotal !== null ? `$${subtotal.toFixed(2)}` : ""}
+          </span>
         </div>
       </div>
     </section>
