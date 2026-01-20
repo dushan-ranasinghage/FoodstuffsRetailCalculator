@@ -11,6 +11,7 @@ import { calculateSubTotal } from "./utils/calculations";
 function App() {
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
   const [price, setPrice] = useState<number | null>(null);
+  const [subtotal, setSubtotal] = useState<number | null>(null);
 
   const onChangeNumberOfItems = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNumberOfItems(e.target.value ? parseInt(e.target.value, 10) : null);
@@ -22,7 +23,7 @@ function App() {
 
   const handleCalculate = () => {
     const total = calculateSubTotal(numberOfItems, price);
-    console.log("Subtotal:", total.toFixed(2));
+    setSubtotal(total);
   };
 
   return (
@@ -70,6 +71,12 @@ function App() {
           >
             Calculate
           </button>
+        </div>
+        <div>
+          <label htmlFor="subTotal">Subtotal:</label>
+          <span className="ml-2" id="subTotal">
+            {subtotal !== null ? `$${subtotal.toFixed(2)}` : ""}
+          </span>
         </div>
       </div>
     </section>
