@@ -5,11 +5,12 @@
  * @copyright Copyright 2026 - All Rights Reserved.
  */
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 
 import { calculateDiscount, calculateSubTotal } from "../utils/calculations";
 import CalculationResults from "./CalculationResults/CalculationResults";
 import { TAX_RATES } from "../constants/constants";
+import { useTaxRate } from "../hooks/useTaxRate";
 
 const RetailCalculator = () => {
   const [numberOfItems, setNumberOfItems] = useState<number | null>(null);
@@ -18,9 +19,7 @@ const RetailCalculator = () => {
   const [discount, setDiscount] = useState<number | null>(null);
   const [subtotal, setSubtotal] = useState<number | null>(null);
 
-  const taxRate = useMemo(() => {
-    return region ? TAX_RATES[region as keyof typeof TAX_RATES] : 0;
-  }, [region]);
+  const taxRate = useTaxRate(region);
 
   console.log("taxRate", taxRate);
   
